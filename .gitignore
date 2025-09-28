@@ -1,0 +1,23 @@
+# Bỏ qua thư mục build
+x64/
+Debug/
+Release/
+
+# Visual Studio cache
+.vs/
+
+# File biên dịch
+*.obj
+*.exe
+*.pdb
+*.idb
+*.ipch
+*.ilk
+*.log
+*.tlog
+
+# User-specific
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
