@@ -2,8 +2,11 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <sstream>
+#include <algorithm>
 #include "theater.h"
 using namespace std;
+
 string generateTicketCode() {
     string code = "VE";
     for (int i = 0; i < 5; i++) {
@@ -13,24 +16,23 @@ string generateTicketCode() {
 }
 
 int main() {
-    srand(time(0));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
-    Theater t; 
+    Theater t;
     int choice;
     string name, phone, ticketCode;
-    int row, col;
 
     do {
         cout << "\n===== QUAN LY GHE RAP CHIEU PHIM =====\n";
         cout << "1. Hien thi so do ghe\n";
-        cout << "2. Dat ghe\n";
+        cout << "2. Dat ghe (co the nhap nhieu ghe, vd: A1,A2,B3)\n";
         cout << "3. Huy ghe\n";
         cout << "4. Tim kiem theo SDT\n";
-        cout << "5. Hien thi danh sach dat ve\n";
+        cout << "5. Hien thi danh sach ve\n";
         cout << "0. Thoat\n";
         cout << "Lua chon: ";
         cin >> choice;
-        cin.ignore(); 
+        cin.ignore();
 
         switch (choice) {
         case 1:
@@ -41,16 +43,20 @@ int main() {
             getline(cin, name);
             cout << "Nhap so dien thoai: ";
             getline(cin, phone);
-            cout << "Nhap ma ghe (vd A1, B3): ";
-            string seatCode;
-            getline(cin, seatCode);
+            cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
+            string seatLine;
+            getline(cin, seatLine);
 
-            ticketCode = generateTicketCode();
-            t.reserveSeat(name, phone, seatCode, ticketCode);
-            cout << ">>> Ma ve cua ban: " << ticketCode << "\n";
+            stringstream ss(seatLine);
+            string seatCode;
+            while (getline(ss, seatCode, ',')) {
+                seatCode.erase(remove_if(seatCode.begin(), seatCode.end(), ::isspace), seatCode.end());
+                string ticketCode = generateTicketCode();
+                t.reserveSeat(name, phone, seatCode, ticketCode);
+                cout << ">>> Ghe " << seatCode << " dat thanh cong. Ma ve: " << ticketCode << "\n";
+            }
             break;
         }
-
         case 3: {
             cout << "Nhap ten khach hang: ";
             getline(cin, name);
@@ -68,9 +74,15 @@ int main() {
             t.searchByPhone(phone);
             break;
         }
-        case 5:
-            t.displayAllReservations();
+        case 5: {
+            cout << "Nhap password: ";
+            string pass;
+            cin >> pass;
+            if (pass == "quanli123") {
+                t.displaySortedBySeat();
+            }
             break;
+        }
         case 0:
             cout << "Thoat chuong trinh.\n";
             break;

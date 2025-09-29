@@ -30,6 +30,7 @@ public:
         if (node) return &node->ticket;
         return nullptr;
     }
+
     void findByPhone(string phone) {
         bool found = false;
         for (int i = 0; i < TABLE_SIZE; i++) {
@@ -41,6 +42,20 @@ public:
     void printAll() {
         for (int i = 0; i < TABLE_SIZE; i++) table[i].print();
     }
+
+    int countTickets() {
+        int count = 0;
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            Node* current = table[i].getHead();
+            while (current) {
+                count++;
+                current = current->next;
+            }
+        }
+        return count;
+    }
+
+    LinkedList* getTable() { return table; }
 };
 
 #endif

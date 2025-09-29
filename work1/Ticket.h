@@ -8,8 +8,7 @@ struct Ticket {
     string code;
     string name;
     string phone;
-    int row, col;
+    int row = 0, col = 0;
 };
 
 #endif
-#pragma once

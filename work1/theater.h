@@ -82,9 +82,42 @@ public:
         tickets.findByPhone(phone);
     }
 
-    void displayAllReservations() {
-        cout << "Danh sach tat ca ve da dat:\n";
-        tickets.printAll();
+    void displaySortedBySeat() {
+        int n = tickets.countTickets();
+        if (n == 0) {
+            cout << "Chua co ve nao.\n";
+            return;
+        }
+        Ticket* arr = new Ticket[n];
+        int idx = 0;
+        for (int i = 0; i < 100; i++) {
+            Node* current = tickets.getTable()[i].getHead();
+            while (current) {
+                if (idx < n) {
+                    arr[idx++] = current->ticket;
+                }
+                current = current->next;
+            }
+        }
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j].row > arr[j + 1].row ||
+                    (arr[j].row == arr[j + 1].row && arr[j].col > arr[j + 1].col)) {
+                    Ticket temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+        cout << "Danh sach ve da dat :\n";
+        for (int i = 0; i < n; i++) {
+            string seatCode = string(1, 'A' + arr[i].row) + to_string(arr[i].col + 1);
+            cout << "Code: " << arr[i].code
+                << ", Name: " << arr[i].name
+                << ", Phone: " << arr[i].phone
+                << ", Ghe " << seatCode << endl;
+        }
+        delete[] arr;
     }
 };
 

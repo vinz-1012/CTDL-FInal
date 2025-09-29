@@ -53,6 +53,7 @@ public:
         }
         return nullptr;
     }
+
     bool findByPhone(string phone) {
         Node* current = head;
         bool found = false;
@@ -80,6 +81,8 @@ public:
             current = current->next;
         }
     }
+
+    Node* getHead() { return head; }
 };
 
 #endif
