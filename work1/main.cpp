@@ -62,12 +62,9 @@ int main() {
             break;
         }
         case 5: {
-            cout << "Nhap password: ";
-            string pass;
-            cin >> pass;
-            if (pass == "quanli123") {
-                t.displaySortedBySeat();
-            }
+            cout << "Nhap so dien thoai: ";
+            getline(cin, phone);
+            t.searchByPhone(phone);
             break;
         }
         case 0:
