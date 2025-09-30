@@ -22,7 +22,7 @@ int main() {
         cout << "2. Dat ghe (co the nhap nhieu ghe, vd: A1,A2,B3)\n";
         cout << "3. Huy ghe\n";
         cout << "4. Tim kiem theo SDT\n";
-        cout << "5. Hien thi danh sach ve da dat\n";
+        cout << "5. Hien thi danh sach ve\n";
         cout << "0. Thoat\n";
         cout << "Lua chon: ";
         cin >> choice;
