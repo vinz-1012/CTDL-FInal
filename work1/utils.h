@@ -27,13 +27,13 @@ string generateUniqueTicketCode(HashTable& tickets) {
     return code;
 }
 
-void reserveMultipleSeats(Theater& t, const string& name, const string& phone, const string& seatLine) {
+void reserveMultipleSeats(Theater& t, const string& name, const string& phone, const string& password, const string& seatLine) {
     stringstream ss(seatLine);
     string seatCode;
     while (getline(ss, seatCode, ',')) {
         seatCode.erase(remove_if(seatCode.begin(), seatCode.end(), ::isspace), seatCode.end());
-        string ticketCode = generateUniqueTicketCode(t.getTickets()); 
-        t.reserveSeat(name, phone, seatCode, ticketCode);
+        string ticketCode = generateUniqueTicketCode(t.getTickets());
+        t.reserveSeat(name, phone, seatCode, ticketCode, password);
         cout << ">>> Ghe " << seatCode << " dat thanh cong. Ma ve: " << ticketCode << "\n";
     }
 }

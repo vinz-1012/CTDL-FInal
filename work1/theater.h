@@ -1,6 +1,6 @@
 ﻿#ifndef THEATER_H
 #define THEATER_H
-
+#define ADMIN_PASSWORD "quanli123"
 #include "Ticket.h"
 #include "queue.h"
 #include "hashtable.h"
@@ -52,34 +52,48 @@ public:
         return true;
     }
 
-    void reserveSeat(string name, string phone, string seatCode, string code) {
+    void reserveSeat(string name, string phone, string seatCode, string code, string password) {
         int row, col;
         if (!parseSeatCode(seatCode, row, col)) {
             throw invalid_argument("Ma ghe khong hop le.");
         }
         if (seats[row][col]) {
-            Ticket t = { code,name,phone,row,col };
+            Ticket t = { code, name, phone, password, row, col, 100000 };
             waitingList.enqueue(t);
             throw runtime_error("Ghe da duoc dat, da them vao danh sach cho.");
         }
         seats[row][col] = true;
-        Ticket t = { code,name,phone,row,col };
+        Ticket t = { code, name, phone, password, row, col, 100000 };
         tickets.insert(t);
     }
 
-    void cancelSeat(string name, string phone, string code) {
+
+    void cancelSeat(string name, string phone, string code, string password) {
         Ticket* t = tickets.find(code);
         if (!t) {
             throw runtime_error("Khong tim thay ve.");
         }
+
+        if (password != ADMIN_PASSWORD) {
+            if (t->phone != phone || t->password != password) {
+                throw runtime_error("Thong tin xac thuc khong dung. Khong the huy ve.");
+            }
+        }
+
         seats[t->row][t->col] = false;
+        int refund = t->price;   
         tickets.remove(code);
+
+        cout << ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n";
+
         if (!waitingList.isEmpty()) {
             Ticket next = waitingList.dequeue();
             string seatCode = string(1, 'A' + next.row) + to_string(next.col + 1);
-            reserveSeat(next.name, next.phone, seatCode, next.code);
+            reserveSeat(next.name, next.phone, seatCode, next.code, next.password);
         }
     }
+
+
 
     void searchByPhone(string phone) {
         try {
