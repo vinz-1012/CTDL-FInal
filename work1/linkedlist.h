@@ -2,8 +2,7 @@
 #define LINKEDLIST_H
 
 #include "ticket.h"
-#include <iostream>
-using namespace std;
+#include <stdexcept>
 
 struct Node {
     Ticket ticket;
@@ -54,32 +53,27 @@ public:
         return nullptr;
     }
 
-    bool findByPhone(string phone) {
+    Ticket* findByPhone(string phone, int& n) {
+        n = 0;
         Node* current = head;
-        bool found = false;
+        while (current) {
+            if (current->ticket.phone == phone) n++;
+            current = current->next;
+        }
+        if (n == 0) {
+            throw std::runtime_error("Khong tim thay ve voi SDT nay.");
+        }
+
+        Ticket* results = new Ticket[n];
+        int idx = 0;
+        current = head;
         while (current) {
             if (current->ticket.phone == phone) {
-                string seatCode = string(1, 'A' + current->ticket.row) + to_string(current->ticket.col + 1);
-                cout << "Code: " << current->ticket.code
-                    << ", Name: " << current->ticket.name
-                    << ", Ghe " << seatCode << endl;
-                found = true;
+                results[idx++] = current->ticket;
             }
             current = current->next;
         }
-        return found;
-    }
-
-    void print() {
-        Node* current = head;
-        while (current) {
-            string seatCode = string(1, 'A' + current->ticket.row) + to_string(current->ticket.col + 1);
-            cout << "Code: " << current->ticket.code
-                << ", Name: " << current->ticket.name
-                << ", Phone: " << current->ticket.phone
-                << ", Ghe " << seatCode << endl;
-            current = current->next;
-        }
+        return results;
     }
 
     Node* getHead() { return head; }

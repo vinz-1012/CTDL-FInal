@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include "ticket.h"
+#include <stdexcept>
 
 struct QueueNode {
     Ticket ticket;
@@ -26,7 +27,9 @@ public:
     }
 
     Ticket dequeue() {
-        if (isEmpty()) return Ticket{};
+        if (isEmpty()) {
+            throw std::out_of_range("Hang doi rong.");
+        }
         QueueNode* temp = front;
         Ticket t = temp->ticket;
         front = front->next;

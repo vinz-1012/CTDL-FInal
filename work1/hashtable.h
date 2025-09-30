@@ -2,6 +2,7 @@
 #define HASHTABLE_H
 
 #include "linkedlist.h"
+#include <stdexcept>
 
 #define TABLE_SIZE 100
 
@@ -31,16 +32,38 @@ public:
         return nullptr;
     }
 
-    void findByPhone(string phone) {
-        bool found = false;
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            if (table[i].findByPhone(phone)) found = true;
-        }
-        if (!found) cout << "Khong tim thay ve nao voi SDT nay.\n";
-    }
+    
+    Ticket* findByPhone(string phone, int& count) {
+        count = 0;
 
-    void printAll() {
-        for (int i = 0; i < TABLE_SIZE; i++) table[i].print();
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            Node* current = table[i].getHead();
+            while (current) {
+                if (current->ticket.phone == phone) {
+                    count++;
+                }
+                current = current->next;
+            }
+        }
+
+        if (count == 0) {
+            throw std::runtime_error("Khong tim thay ve voi SDT nay.");
+        }
+
+      
+        Ticket* results = new Ticket[count];
+        int idx = 0;
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            Node* current = table[i].getHead();
+            while (current) {
+                if (current->ticket.phone == phone) {
+                    results[idx++] = current->ticket;
+                }
+                current = current->next;
+            }
+        }
+
+        return results;
     }
 
     int countTickets() {
