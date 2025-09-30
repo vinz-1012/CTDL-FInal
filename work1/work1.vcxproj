@@ -131,6 +131,7 @@
     <ClInclude Include="queue.h" />
     <ClInclude Include="theater.h" />
     <ClInclude Include="Ticket.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
