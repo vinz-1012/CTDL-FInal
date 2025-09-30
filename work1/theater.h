@@ -1,7 +1,7 @@
 ﻿#ifndef THEATER_H
 #define THEATER_H
 
-#include "ticket.h"
+#include "Ticket.h"
 #include "queue.h"
 #include "hashtable.h"
 #include <stdexcept>

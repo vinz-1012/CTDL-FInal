@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "ticket.h"
+#include "Ticket.h"
 #include <stdexcept>
 
 struct QueueNode {

@@ -1,7 +1,7 @@
 ﻿#ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include "ticket.h"
+#include "Ticket.h"
 #include <stdexcept>
 
 struct Node {
