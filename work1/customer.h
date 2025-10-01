@@ -12,7 +12,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
 
     do {
         cout << "\n===== MENU KHACH HANG =====\n";
-        cout << "1. Dat ghe (co the nhap nhieu ghe, vd: A1,A2,B3)\n";
+        cout << "1. Dat ghe\n";
         cout << "2. Huy ghe\n";
         cout << "3. Tim kiem theo SDT\n";
         cout << "4. Hien thi danh sach ve da dat\n";
@@ -25,6 +25,25 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
         case 1: {
             cout << "Nhap ten khach hang: ";
             getline(cin, name);
+            int opt;
+            cout << "Ban co muon he thong goi y GHE DEP? (1=Co, 0=Khong): ";
+            cin >> opt;
+            cin.ignore();
+            if (opt == 1) {
+                int numSeats;
+                cout << endl;
+                cout << "Nhap so luong ghe muon dat: ";
+                cin >> numSeats;
+                cin.ignore();
+                try {
+                     t.findBestSeats(numSeats);
+                   
+                }
+                catch (const exception& e) {
+                    cout << e.what() << endl;
+                }
+            }
+            t.displaySeats();
             cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
             getline(cin, seatLine);
             reserveMultipleSeats(t, name, phone, password, seatLine);
