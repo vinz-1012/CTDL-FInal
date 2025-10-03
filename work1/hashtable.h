@@ -78,7 +78,8 @@ public:
         return count;
     }
 
-    LinkedList* getTable() { return table; }
+    LinkedList* getTable() { return table;}
+
 };
 
 #endif

@@ -10,9 +10,6 @@ struct Ticket {
     string phone;
     string password;
     int row = 0, col = 0;
-    int price = 100000; 
+    int price=0; 
 };
-
-
-
 #endif

@@ -50,7 +50,7 @@ int main() {
                 runAdminMenu(t);  
             }
             else {
-                cout << "Sai mat khau quan ly!\n";
+                cout<<RED << "Sai mat khau quan ly!\n"<<RESET;
             }
             break;
         }
@@ -60,7 +60,7 @@ int main() {
             break;
 
         default:
-            cout << "Lua chon khong hop le!\n";
+            cout<<RED << "Lua chon khong hop le!\n";
         }
     } while (choice != 0);
 

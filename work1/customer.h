@@ -14,8 +14,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
         cout << "\n===== MENU KHACH HANG =====\n";
         cout << "1. Dat ghe\n";
         cout << "2. Huy ghe\n";
-        cout << "3. Tim kiem theo SDT\n";
-        cout << "4. Hien thi danh sach ve da dat\n";
+        cout << "3. Xem ve da dat\n";
         cout << "0. Thoat che do khach hang\n";
         cout << "Lua chon: ";
         cin >> choiceCus;
@@ -23,6 +22,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
 
         switch (choiceCus) {
         case 1: {
+            t.displaySeats();
             cout << "Nhap ten khach hang: ";
             getline(cin, name);
             int opt;
@@ -31,19 +31,18 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
             cin.ignore();
             if (opt == 1) {
                 int numSeats;
-                cout << endl;
                 cout << "Nhap so luong ghe muon dat: ";
                 cin >> numSeats;
                 cin.ignore();
                 try {
+                    cout << "GHE DEP: ";
                      t.findBestSeats(numSeats);
                    
                 }
                 catch (const exception& e) {
-                    cout << e.what() << endl;
+                    cout<<RED << e.what() <<RESET<< endl;
                 }
             }
-            t.displaySeats();
             cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
             getline(cin, seatLine);
             reserveMultipleSeats(t, name, phone, password, seatLine);
@@ -57,25 +56,19 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
                 t.cancelSeat("", phone, ticketCode, password);
             }
             catch (const exception& e) {
-                cout << "Loi khi huy ve: " << e.what() << endl;
+                cout <<RED<< "Loi khi huy ve: " << e.what()<<RESET << endl;
             }
             break;
         }
         case 3: {
-            string searchPhone;
-            cout << "Nhap so dien thoai can tim: ";
-            getline(cin, searchPhone);
-            t.searchByPhone(searchPhone);
+            t.displayTickets_cus(phone);
             break;
         }
-        case 4:
-            t.displaySortedBySeat();
-            break;
         case 0:
             cout << "Thoat che do khach hang.\n";
             break;
         default:
-            cout << "Lua chon khong hop le!\n";
+            cout<<RED << "Lua chon khong hop le!\n"<<RESET;
         }
     } while (choiceCus != 0);
 }
