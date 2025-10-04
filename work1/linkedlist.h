@@ -43,7 +43,6 @@ public:
         }
         return false;
     }
-
     Node* find(string code) {
         Node* current = head;
         while (current) {
@@ -52,7 +51,6 @@ public:
         }
         return nullptr;
     }
-
     Ticket* findByPhone(string phone, int& n) {
         n = 0;
         Node* current = head;
@@ -75,7 +73,6 @@ public:
         }
         return results;
     }
-
     Node* getHead() { return head; }
 };
 

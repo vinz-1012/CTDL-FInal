@@ -45,12 +45,10 @@ public:
                 current = current->next;
             }
         }
-
         if (count == 0) {
-            throw std::runtime_error("Khong tim thay ve voi SDT nay.");
+            throw runtime_error("Khong tim thay ve voi so dien thoai nay.");
         }
 
-      
         Ticket* results = new Ticket[count];
         int idx = 0;
         for (int i = 0; i < TABLE_SIZE; i++) {

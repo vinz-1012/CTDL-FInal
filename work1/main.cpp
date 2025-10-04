@@ -46,21 +46,24 @@ int main() {
             string pass;
             cout << "Nhap mat khau quan ly: ";
             getline(cin, pass);
+
             if (pass == "quanli123") {
-                runAdminMenu(t);  
+                cout << "Ban dang lam viec voi che do quan li.\n";
+                runAdminMenu(t);
             }
             else {
-                cout<<RED << "Sai mat khau quan ly!\n"<<RESET;
+                cout << RED << "Sai mat khau quan ly! Quay lai menu chinh.\n" << RESET;
             }
             break;
         }
+
 
         case 0:
             cout << "Thoat chuong trinh.\n";
             break;
 
         default:
-            cout<<RED << "Lua chon khong hop le!\n";
+            cout<<RED << "Lua chon khong hop le!\n"<<RESET;
         }
     } while (choice != 0);
 

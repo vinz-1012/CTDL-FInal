@@ -30,7 +30,6 @@ public:
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++) seats[i][j] = false;
     }
-
     void displaySeats() {
         try {
             cout << "So do ghe:\n   ";
@@ -58,9 +57,9 @@ public:
             cout << GREEN << "[X]" << RESET << " : Da duoc dat\n";
         }
         catch (const exception& e) {
-            cout<< RED << "Loi khi hien thi ghe: " << e.what() << endl;
+            cout << RED << "Loi khi hien thi ghe: " << e.what() << endl;
         }
-    }
+    } 
 
     bool parseSeatCode(string seatCode, int& row, int& col) {
         if (seatCode.length() < 2) return false;
@@ -107,7 +106,7 @@ public:
         int refund = t->price;   
         tickets.remove(code);
 
-        cout <<RED<< ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n";
+        cout << RED << ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n"<<RESET;
 
         if (!waitingList.isEmpty()) {
             Ticket next = waitingList.dequeue();
@@ -120,9 +119,6 @@ public:
         try {
             int count = 0;
             Ticket* results = tickets.findByPhone(phone, count);
-            if (count == 0) {
-                throw runtime_error("Ban chua dat ve.");
-            }
 
             cout << BOLD << BLUE;
             cout << "+---------+----------------------+---------------+------+-----------+\n";
@@ -156,10 +152,7 @@ public:
         try {
             int count = 0;
             Ticket* results = tickets.findByPhone(phone, count);
-            if (count == 0) {
-                throw runtime_error("Khong tim thay ve nao cho so dien thoai nay.");
-            }
-
+      
             cout << BOLD << BLUE;
             cout << "+---------+----------------------+---------------+------+-----------+\n";
             cout << "| Mave    | Ten                  | Sdt           | Ghe  | Gia(VND)  |\n";
@@ -293,7 +286,7 @@ public:
     }
     void findBestSeats(int numSeats) {
         if (numSeats <= 0 || numSeats > cols) {
-            throw runtime_error("So luong ghe khong hop le.");
+            throw runtime_error("Rat tiec, so luong ghe ban can khong du.");
         }
 
         BestSeatChoice best = { -1, -1, DBL_MAX, INT_MAX };
@@ -352,7 +345,7 @@ public:
         if (best.row == -1) {
             throw runtime_error("Khong tim thay cum ghe lien ke phu hop.");
         }
-
+        cout << "GHE DEP: ";
         for (int k = 0; k < numSeats; k++) {
             string seatCode = string(1, 'A' + best.row) + to_string(best.startCol + k + 1);
             cout << seatCode << " ";

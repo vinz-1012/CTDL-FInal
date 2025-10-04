@@ -35,7 +35,6 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
                 cin >> numSeats;
                 cin.ignore();
                 try {
-                    cout << "GHE DEP: ";
                      t.findBestSeats(numSeats);
                    
                 }
