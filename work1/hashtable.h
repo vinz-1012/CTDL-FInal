@@ -46,7 +46,7 @@ public:
             }
         }
         if (count == 0) {
-            throw runtime_error("Khong tim thay ve voi so dien thoai nay.");
+            throw runtime_error("Khong tim thay ve voi SDT nay.");
         }
 
         Ticket* results = new Ticket[count];
