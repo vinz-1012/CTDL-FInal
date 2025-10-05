@@ -15,6 +15,8 @@
 #include <iostream>
 #include <cctype>
 #include <iomanip> 
+#include <cfloat> 
+#include <climits> 
 using namespace std;
 
 class Theater {
@@ -34,20 +36,20 @@ public:
         try {
             cout << "So do ghe:\n   ";
             for (int j = 0; j < cols; j++)
-                cout << "[" << j + 1 << "]";
+                cout << "[" << j + 1 << "] ";
             cout << endl;
 
             for (int i = 0; i < rows; i++) {
                 cout << char('A' + i) << " ";
                 for (int j = 0; j < cols; j++) {
                     if (seats[i][j]) {
-                        cout << GREEN << "[X]" << RESET;
+                        cout << GREEN << " [X]" << RESET;
                     }
                     else if ((i >= 1 && i <= 3) && (j >= 1 && j <= 3)) {
-                        cout << RED << "[ ]" << RESET;
+                        cout << RED << " [ ]" << RESET;
                     }
                     else {
-                        cout << YELLOW << "[ ]" << RESET;
+                        cout << YELLOW << " [ ]" << RESET;
                     }
                 }
                 cout << endl;
@@ -115,40 +117,7 @@ public:
         }
     }
 
-    void displayTickets_cus(string phone) {
-        try {
-            int count = 0;
-            Ticket* results = tickets.findByPhone(phone, count);
-
-            cout << BOLD << BLUE;
-            cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << "| Mave    | Ten                  | SDT           | Ghe  | Gia(VND)  |\n";
-            cout << "+---------+----------------------+---------------+------+-----------+\n" << RESET;
-
-            int sum = 0;
-            for (int i = 0; i < count; i++) {
-                string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
-
-                cout << "| " << setw(6) << left << results[i].code
-                    << " | " << setw(20) << left << results[i].name
-                    << " | " << setw(13) << left << results[i].phone
-                    << " | " << YELLOW << setw(4) << left << seatCode << RESET
-                    << " | " << RED << setw(9) << right << results[i].price << RESET << " |"
-                    << endl;
-
-                sum += results[i].price;
-            }
-
-            cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << GREEN << ">>> Tong tien ve cua ban: " << sum << " VND" << RESET << endl;
-
-            delete[] results;
-        }
-        catch (const exception& e) {
-            cout<<RED << "Loi tim kiem: " << e.what() << RESET << endl;
-        }
-    }
-    void searchByPhone(string phone) {
+    void displayTicketsByPhone(string phone, string label) {
         try {
             int count = 0;
             Ticket* results = tickets.findByPhone(phone, count);
@@ -173,7 +142,7 @@ public:
             }
 
             cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << GREEN << ">>> Tong tien ve cua SDT: " << sum << " VND" << RESET << endl;
+            cout << GREEN << ">>> Tong tien ve cua " << label << ": " << sum << " VND" << RESET << endl;
 
             delete[] results;
         }

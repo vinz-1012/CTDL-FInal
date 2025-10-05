@@ -60,9 +60,10 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
             break;
         }
         case 3: {
-            t.displayTickets_cus(phone);
+            t.displayTicketsByPhone(phone, "ban"); 
             break;
         }
+
         case 0:
             cout << "Thoat che do khach hang.\n";
             break;
