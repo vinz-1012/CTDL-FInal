@@ -10,7 +10,6 @@
 #include "theater.h"
 using namespace std;
 
-
 string generateTicketCode() {
     string code = "VE";
     for (int i = 0; i < 5; i++) {
@@ -23,9 +22,10 @@ string generateUniqueTicketCode(HashTable& tickets) {
     string code;
     do {
         code = generateTicketCode();
-    } while (tickets.find(code) != nullptr); 
+    } while (tickets.find(code) != nullptr);
     return code;
 }
+
 
 void reserveMultipleSeats(Theater& t, const string& name, const string& phone, const string& password, const string& seatLine) {
     stringstream ss(seatLine);
@@ -33,10 +33,12 @@ void reserveMultipleSeats(Theater& t, const string& name, const string& phone, c
     while (getline(ss, seatCode, ',')) {
         seatCode.erase(remove_if(seatCode.begin(), seatCode.end(), ::isspace), seatCode.end());
         string ticketCode = generateUniqueTicketCode(t.getTickets());
-        t.reserveSeat(name, phone, seatCode, ticketCode, password);
-        cout << ">>> Ghe " << seatCode << " dat thanh cong. Ma ve: " << ticketCode << "\n";
+        
+        t.reserveSeat(name, phone, seatCode, ticketCode, password, t.getMovieId(), t.getShowtime());
+        cout << ">>> Ghe " << seatCode << " dat thanh cong. Ma ve: " << ticketCode
+            << " | Ma phim: " << t.getMovieId()
+            << " | Suat chieu: " << t.getShowtime() << "\n";
     }
 }
 
 #endif
-#pragma once

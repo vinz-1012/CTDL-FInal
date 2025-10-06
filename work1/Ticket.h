@@ -11,5 +11,7 @@ struct Ticket {
     string password;
     int row = 0, col = 0;
     int price=0; 
+    string movieId;  
+    string showtime; 
 };
 #endif

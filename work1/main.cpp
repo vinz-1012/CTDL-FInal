@@ -8,21 +8,22 @@
 #include "utils.h"
 #include "admin.h"
 #include "customer.h"
+#include "moviemanager.h"
 
 using namespace std;
 
 int main() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    Theater t;
+    MovieManager* movieManager = new MovieManager();
     int choice;
 
     do {
-        cout << "\n===== HE THONG GHE RAP CHIEU PHIM =====\n";
-        cout << "1. Hien thi so do ghe\n";
+        cout << "\n===== HE THONG RAP CHIEU PHIM =====\n";
+        cout << "1. Xem danh sach phim\n";
         cout << "2. Dang nhap khach hang\n";
         cout << "3. Dang nhap quan ly\n";
-        cout << "0. Thoat\n"; 
+        cout << "0. Thoat\n";
         cout << "Lua chon: ";
         cin >> choice;
         cin.ignore();
@@ -30,30 +31,63 @@ int main() {
 
         switch (choice) {
         case 1:
-            t.displaySeats();
+            movieManager->displayMovies();
             break;
+
         case 2: {
             string phone, password;
             cout << "Nhap so dien thoai: ";
             getline(cin, phone);
             cout << "Nhap mat khau: ";
             getline(cin, password);
-            if (t.isPhoneExists(phone)) {
-             
-                if (t.checkCustomerLogin(phone, password)) {
-                    cout << "Dang nhap thanh cong!\n";
-                    runCustomerMenu(t, phone, password);
+
+            bool isExisting = false;
+            bool loggedIn = false;
+            Theater* foundTheater = nullptr;
+
+            
+            for (int i = 0; i < movieManager->countMovies(); i++) {
+                Movie* m = movieManager->getMovie(i);
+                for (int j = 0; j < m->showtimeCount; j++) {
+                    Theater* t = movieManager->getTheater(m, j);
+                    if (t->isPhoneExists(phone)) {
+                        isExisting = true;
+                        foundTheater = t;
+                        if (t->checkCustomerLogin(phone, password)) {
+                            loggedIn = true;
+                        }
+                        break; 
+                    }
                 }
-                else {
-                    cout << "So dien thoai da ton tai hoac mat khau khong dung. Khong the tao tai khoan moi!\n";
-                }
+                if (isExisting) break; 
+            }
+
+            if (isExisting && !loggedIn) {
+                cout << RED << "So dien thoai da ton tai hoac mat khau khong dung. Khong the tao tai khoan moi!\n" << RESET;
+                break; 
+            }
+
+            if (!isExisting) {
+                cout << GREEN << "Tai khoan moi se duoc tao khi ban dat ve lan dau.\n" << RESET;
             }
             else {
-                cout << "Tai khoan moi se duoc tao khi ban dat ve lan dau.\n";
-                runCustomerMenu(t, phone, password);
+                cout << GREEN << "Dang nhap thanh cong!\n" << RESET;
             }
+
+            
+            Movie* selectedMovie = movieManager->selectMovie();
+            if (!selectedMovie) break;
+
+            int showtimeIndex = movieManager->selectShowtime(selectedMovie);
+            if (showtimeIndex == -1) break;
+
+            Theater* selectedTheater = movieManager->getTheater(selectedMovie, showtimeIndex);
+
+            runCustomerMenu(*selectedTheater, phone, password);
             break;
         }
+
+
 
         case 3: {
             string pass;
@@ -61,8 +95,8 @@ int main() {
             getline(cin, pass);
 
             if (pass == "quanli123") {
-                cout << "Ban dang lam viec voi che do quan li.\n";
-                runAdminMenu(t);
+                cout << "Ban dang lam viec voi che do quan ly.\n";
+                runAdminMenu(*movieManager);
             }
             else {
                 cout << RED << "Sai mat khau quan ly! Quay lai menu chinh.\n" << RESET;
@@ -70,15 +104,16 @@ int main() {
             break;
         }
 
-
         case 0:
             cout << "Thoat chuong trinh.\n";
             break;
 
         default:
-            cout<<RED << "Lua chon khong hop le!\n"<<RESET;
+            cout << RED << "Lua chon khong hop le!\n" << RESET;
         }
     } while (choice != 0);
+
+    delete movieManager;
 
     return 0;
 }

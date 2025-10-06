@@ -51,16 +51,15 @@ public:
         }
         return nullptr;
     }
-    Ticket* findByPhone(string phone, int& n) {
+    Ticket* findByPhone(const string& phone, int& n) {
         n = 0;
         Node* current = head;
         while (current) {
             if (current->ticket.phone == phone) n++;
             current = current->next;
         }
-        if (n == 0) {
-            throw std::runtime_error("Khong tim thay ve voi SDT nay.");
-        }
+
+        if (n == 0) return nullptr;
 
         Ticket* results = new Ticket[n];
         int idx = 0;
@@ -73,6 +72,7 @@ public:
         }
         return results;
     }
+
     Node* getHead() { return head; }
 };
 

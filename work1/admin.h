@@ -1,19 +1,20 @@
-﻿#ifndef ADMINMENU_H
-#define ADMINMENU_H
-
+﻿#ifndef ADMIN_H
+#define ADMIN_H
 
 #include "theater.h"
+#include "moviemanager.h"
 #include <iostream>
 using namespace std;
 
-void runAdminMenu(Theater& t) {
+void runAdminMenu(MovieManager& movieManager) {
     int choiceAdmin;
     do {
         cout << "\n===== MENU QUAN LY =====\n";
-        cout << "1. Hien thi danh sach tat ca ve\n";
-        cout << "2. Hien thi so do ghe\n";
+        cout << "1. Hien thi danh sach tat ca ve cua mot suat\n";
+        cout << "2. Hien thi so do ghe cua mot suat\n";
         cout << "3. Tim ve theo SDT\n";
         cout << "4. Huy ve\n";
+        cout << "5. Quan ly phim\n";
         cout << "0. Thoat che do quan ly\n";
         cout << "Lua chon: ";
         cin >> choiceAdmin;
@@ -21,47 +22,110 @@ void runAdminMenu(Theater& t) {
         system("cls");
 
         switch (choiceAdmin) {
-        case 1:
-            t.displaySortedBySeat();
+        case 1: { 
+            Movie* selectedMovie = movieManager.selectMovie();
+            if (!selectedMovie) break;
+            int showIndex = movieManager.selectShowtime(selectedMovie);
+            if (showIndex == -1) break;
+            Theater* theater = movieManager.getTheater(selectedMovie, showIndex);
+            if (!theater) break;
+
+            theater->displaySortedBySeat();
             break;
-        case 2:
-            t.displaySeats();
+        }
+        case 2: { 
+            Movie* selectedMovie = movieManager.selectMovie();
+            if (!selectedMovie) break;
+            int showIndex = movieManager.selectShowtime(selectedMovie);
+            if (showIndex == -1) break;
+            Theater* theater = movieManager.getTheater(selectedMovie, showIndex);
+            if (!theater) break;
+
+            theater->displaySeats();
             break;
-        case 3: {
+        }
+        case 3: { 
             string searchPhone;
             cout << "Nhap so dien thoai can tim: ";
             getline(cin, searchPhone);
-            t.displayTicketsByPhone(searchPhone,ADMIN_PASSWORD); 
+            bool foundAny = false;
+
+            
+            for (int i = 0; i < movieManager.countMovies(); i++) {
+                Movie* m = movieManager.getMovie(i);
+                for (int j = 0; j < m->showtimeCount; j++) {
+                    Theater* t = movieManager.getTheater(m, j);
+                    try {
+                        t->displayTicketsByPhone(searchPhone, ADMIN_PASSWORD);
+                        foundAny = true;
+                    }
+                    catch (const std::exception&) {}
+                }
+            }
+            if (!foundAny)
+                cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;
             break;
         }
-        case 4: {
+        case 4: { 
             string code;
             cout << "Nhap ma ve can huy: ";
             cin >> code;
             cin.ignore();
+            bool found = false;
 
-            Ticket* tk = t.getTickets().find(code);
-            if (!tk) {
-                cout<<RED << "Khong tim thay ve.\n"<<RESET;
+            for (int i = 0; i < movieManager.countMovies(); i++) {
+                Movie* m = movieManager.getMovie(i);
+                for (int j = 0; j < m->showtimeCount; j++) {
+                    Theater* t = movieManager.getTheater(m, j);
+                    Ticket* tk = t->getTickets().find(code);
+                    if (tk) {
+                        
+                        string seatCode = string(1, 'A' + tk->row) + to_string(tk->col + 1);
+                        t->cancelSeat(tk->name, tk->phone, tk->code, ADMIN_PASSWORD);
+                        cout << RED << ">>> Da huy ve: " << code
+                            << " (Ghe " << seatCode << ")\n" << RESET;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
             }
-            else {
-                string seatCode = string(1, 'A' + tk->row) + to_string(tk->col + 1);
-                t.cancelSeat(tk->name, tk->phone, tk->code, ADMIN_PASSWORD);
-                cout<<RED << ">>> Quan ly da huy ve: " << code
-                    << " (Ghe " << seatCode << ")\n"<<RESET; 
-            }
+            if (!found)
+                cout << RED << "Khong tim thay ve voi ma: " << code << "\n" << RESET;
             break;
         }
+        case 5: { 
+            int subChoice;
+            do {
+                cout << "\n===== QUAN LY PHIM =====\n";
+                cout << "1. Xem danh sach phim\n";
+                cout << "2. Them phim\n";
+                cout << "3. Sua phim\n";
+                cout << "4. Xoa phim\n";
+                cout << "0. Quay lai\n";
+                cout << "Lua chon: ";
+                cin >> subChoice;
+                cin.ignore();
+                system("cls");
 
-
+                switch (subChoice) {
+                case 1: movieManager.displayMovies(); break;
+                case 2: movieManager.addMovie(); break;
+                case 3: movieManager.editMovie(); break;
+                case 4: movieManager.deleteMovie(); break;
+                case 0: break;
+                default: cout << RED << "Lua chon khong hop le!\n" << RESET;
+                }
+            } while (subChoice != 0);
+            break;
+        }
         case 0:
             cout << "Thoat che do quan ly.\n";
             break;
         default:
-            cout<<RED << "Lua chon khong hop le!\n"<<RESET;
+            cout << RED << "Lua chon khong hop le!\n" << RESET;
         }
     } while (choiceAdmin != 0);
 }
 
 #endif
-#pragma once

@@ -1,4 +1,4 @@
-#ifndef CUSTOMERMENU_H
+﻿#ifndef CUSTOMERMENU_H
 #define CUSTOMERMENU_H
 
 #include "theater.h"
@@ -12,10 +12,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
 
     do {
         cout << "\n===== MENU KHACH HANG =====\n";
-        cout << "1. Dat ghe\n";
-        cout << "2. Huy ghe\n";
-        cout << "3. Xem ve da dat\n";
-        cout << "0. Thoat che do khach hang\n";
+        cout << "1. Dat ghe\n2. Huy ghe\n3. Xem ve da dat\n0. Thoat che do khach hang\n";
         cout << "Lua chon: ";
         cin >> choiceCus;
         cin.ignore();
@@ -29,20 +26,13 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
 
             int opt;
             cout << "Ban co muon he thong goi y GHE DEP? (1=Co, 0=Khong): ";
-            cin >> opt;
-            cin.ignore();
-
+            cin >> opt; cin.ignore();
             if (opt == 1) {
                 int numSeats;
                 cout << "Nhap so luong ghe muon dat: ";
-                cin >> numSeats;
-                cin.ignore();
-                try {
-                    t.findBestSeats(numSeats);
-                }
-                catch (const exception& e) {
-                    cout << RED << e.what() << RESET << endl;
-                }
+                cin >> numSeats; cin.ignore();
+                try { t.findBestSeats(numSeats); }
+                catch (const exception& e) { cout << RED << e.what() << RESET << endl; }
             }
 
             cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
@@ -58,29 +48,22 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
         }
         case 2: {
             cout << "Nhap ma ve: ";
-            cin >> ticketCode;
-            cin.ignore();
-            try {
-                t.cancelSeat("", phone, ticketCode, password);
-            }
-            catch (const exception& e) {
-                cout <<RED<< "Loi khi huy ve: " << e.what()<<RESET << endl;
-            }
+            cin >> ticketCode; cin.ignore();
+            try { t.cancelSeat("", phone, ticketCode, password); }
+            catch (const exception& e) { cout << RED << "Loi khi huy ve: " << e.what() << RESET << endl; }
             break;
         }
         case 3: {
             t.displayTicketsByPhone(phone, password);
             break;
         }
-
         case 0:
-            cout << "Thoat che do khach hang.\n";
-            break;
+            cout << "Thoat che do khach hang.\n"; break;
         default:
-            cout<<RED << "Lua chon khong hop le!\n"<<RESET;
+            cout << RED << "Lua chon khong hop le!\n" << RESET;
         }
     } while (choiceCus != 0);
 }
 
+
 #endif
-#pragma once

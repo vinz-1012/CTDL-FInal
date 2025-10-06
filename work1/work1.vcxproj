@@ -130,6 +130,7 @@
     <ClInclude Include="customer.h" />
     <ClInclude Include="hashtable.h" />
     <ClInclude Include="linkedlist.h" />
+    <ClInclude Include="moviemanager.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="theater.h" />
     <ClInclude Include="Ticket.h" />

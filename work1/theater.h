@@ -26,16 +26,27 @@ private:
     bool seats[10][10];
     HashTable tickets;
     Queue waitingList;
+    string movieId;
+    string showtime;
+
 public:
-    Theater() {
+    Theater(const string& mId = "", const string& st = "")
+        : movieId(mId), showtime(st)
+    {
         rows = cols = 10;
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++) seats[i][j] = false;
     }
+
+    // Getter / Setter
+    string getMovieId() const { return movieId; }
+    string getShowtime() const { return showtime; }
+    void setMovieId(const string& id) { movieId = id; }
+    void setShowtime(const string& st) { showtime = st; }
     void displaySeats() {
         try {
             cout << "\nSo do ghe:\n";
-            cout << setw(3) << "";                
+            cout << setw(3) << "";
             for (int j = 0; j < cols; j++) {
                 cout << setw(4) << (j + 1);
             }
@@ -53,7 +64,7 @@ public:
                     else {
                         symbol = string(YELLOW) + "[ ]" + string(RESET);
                     }
-                    cout << ' ' << symbol; 
+                    cout << ' ' << symbol;
                 }
                 cout << "\n";
             }
@@ -68,8 +79,6 @@ public:
         }
     }
 
-
-
     bool parseSeatCode(string seatCode, int& row, int& col) {
         if (seatCode.length() < 2) return false;
         char r = toupper(seatCode[0]);
@@ -82,28 +91,29 @@ public:
         return true;
     }
 
-    void reserveSeat(string name, string phone, string seatCode, string code, string password) {
+    void reserveSeat(string name, string phone, string seatCode, string code, string password,
+        const string& mId, const string& st)
+    {
         int row, col;
         if (!parseSeatCode(seatCode, row, col)) {
             throw invalid_argument("Ma ghe khong hop le.");
         }
+
         int price = Price(row, col);
         if (seats[row][col]) {
-            Ticket t = { code, name, phone, password, row, col, price };
+            Ticket t = { code, name, phone, password, row, col, price, mId, st };
             waitingList.enqueue(t);
             throw runtime_error("Ghe da duoc dat, da them vao danh sach cho.");
         }
+
         seats[row][col] = true;
-        Ticket t = { code, name, phone, password, row, col, price };
+        Ticket t = { code, name, phone, password, row, col, price, mId, st };
         tickets.insert(t);
     }
 
-
     void cancelSeat(string name, string phone, string code, string password) {
         Ticket* t = tickets.find(code);
-        if (!t) {
-            throw runtime_error("Khong tim thay ve.");
-        }
+        if (!t) throw runtime_error("Khong tim thay ve.");
 
         if (password != ADMIN_PASSWORD) {
             if (t->phone != phone || t->password != password) {
@@ -112,58 +122,56 @@ public:
         }
 
         seats[t->row][t->col] = false;
-        int refund = t->price;   
+        int refund = t->price;
         tickets.remove(code);
 
-        cout << RED << ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n"<<RESET;
+        cout << RED << ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n" << RESET;
 
         if (!waitingList.isEmpty()) {
             Ticket next = waitingList.dequeue();
             string seatCode = string(1, 'A' + next.row) + to_string(next.col + 1);
-            reserveSeat(next.name, next.phone, seatCode, next.code, next.password);
+            reserveSeat(next.name, next.phone, seatCode, next.code, next.password, next.movieId, next.showtime);
         }
     }
+
 
     void displayTicketsByPhone(const string& phone, const string& password) {
-        try {
-            int count = 0;
-            Ticket* results = tickets.findByPhone(phone, count);
+        int count = 0;
+        Ticket* results = tickets.findByPhone(phone, count);
+        if (!results || count == 0) {
+            cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;
+            return;
+        }
 
-            bool found = false;
-            cout << BOLD << BLUE;
-            cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << "| Mave    | Ten                  | SDT           | Ghe  | Gia(VND)  |\n";
-            cout << "+---------+----------------------+---------------+------+-----------+\n" << RESET;
+        cout << BOLD << BLUE;
+        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
+        cout << "| Mave    | Ten                  | SDT           | Ghe   | Gia(VND)  | Ma phim    | Suat chieu |\n";
+        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n" << RESET;
 
-            int sum = 0;
-            for (int i = 0; i < count; i++) {
-                if (ADMIN_PASSWORD ||results[i].password == password) {
-                    found = true;
-                    string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
-
-                    cout << "| " << setw(6) << left << results[i].code
-                        << " | " << setw(20) << left << results[i].name
-                        << " | " << setw(13) << left << results[i].phone
-                        << " | " << YELLOW << setw(4) << left << seatCode << RESET
-                        << " | " << RED << setw(9) << right << results[i].price << RESET << " |"
-                        << endl;
-
-                    sum += results[i].price;
-                }
+        int sum = 0;
+        for (int i = 0; i < count; i++) {
+            if (password == ADMIN_PASSWORD || results[i].password == password) {
+                string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
+                cout << "| " << setw(6) << left << results[i].code
+                    << " | " << setw(20) << left << results[i].name
+                    << " | " << setw(13) << left << results[i].phone
+                    << " | " << YELLOW << setw(5) << left << seatCode << RESET
+                    << " | " << RED << setw(9) << right << results[i].price << RESET
+                    << " | " << setw(10) << left << results[i].movieId
+                    << " | " << setw(10) << left << results[i].showtime
+                    << " |" << endl;
+                sum += results[i].price;
             }
-
-            cout << "+---------+----------------------+---------------+------+-----------+\n";
-            if (found)
-                cout << GREEN << ">>> Tong tien ve: " << sum << " VND" << RESET << endl;
-            else
-                cout << RED << "Khong co ve nao cua tai khoan nay.\n" << RESET;
-
-            delete[] results;
         }
-        catch (const exception& e) {
-            cout << RED << "Loi tim kiem: " << e.what() << RESET << endl;
-        }
+
+        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
+        cout << GREEN << ">>> Tong tien ve: " << sum << " VND" << RESET << endl;
+
+        delete[] results;
     }
+
+
+
 
     void displaySortedBySeat() {
         try {
