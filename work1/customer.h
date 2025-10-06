@@ -65,5 +65,4 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
     } while (choiceCus != 0);
 }
 
-
 #endif

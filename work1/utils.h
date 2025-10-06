@@ -1,4 +1,5 @@
-﻿#ifndef UTILS_H
+﻿#pragma once
+#ifndef UTILS_H
 #define UTILS_H
 
 #include <string>
@@ -8,6 +9,9 @@
 #include <ctime>
 #include <iostream>
 #include "theater.h"
+#include "color.h"
+
+
 using namespace std;
 
 string generateTicketCode() {

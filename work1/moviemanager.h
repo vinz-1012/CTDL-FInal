@@ -1,15 +1,14 @@
-﻿#ifndef MOVIEMANAGER_H
+﻿#pragma once
+#ifndef MOVIEMANAGER_H
 #define MOVIEMANAGER_H
 
 #include <iostream>
 #include <string>
 #include <iomanip>
 #include "theater.h"
+#include"color.h"
 using namespace std;
-
-#define RESET   "\x1b[0m"
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
+ 
 
 struct Movie {
     string id;
@@ -25,7 +24,6 @@ private:
     int count;
 
 public:
-    // Constructor
     MovieManager() {
         count = 3;
         movies[0] = { "P001", "Mua Do", 3, {"7:00", "9:00", "13:00"} };
@@ -42,11 +40,19 @@ public:
 
     
     void displayMovies() {
-        cout << "\n===== DANH SACH PHIM =====\n";
-        cout << left << setw(8) << "Ma" << setw(20) << "Ten phim" << "Suat chieu\n";
+        cout << "\n"
+            << BOLD << BLACK << WHITE_BG
+            << "============== DANH SACH PHIM ================="
+            << RESET << "\n";
+        cout << left << setw(8) << "Ma"
+            << setw(20) << "Ten phim"
+            << "Suat chieu" << RESET << "\n";
+
         cout << "-----------------------------------------------\n";
+
         for (int i = 0; i < count; i++) {
-            cout << left << setw(8) << movies[i].id << setw(20) << movies[i].title;
+            cout << left << setw(8) << movies[i].id
+                << setw(20) << movies[i].title;
             for (int j = 0; j < movies[i].showtimeCount; j++) {
                 cout << movies[i].showtimes[j];
                 if (j < movies[i].showtimeCount - 1) cout << ", ";
@@ -162,8 +168,8 @@ public:
         Movie* m = selectMovie();
         if (!m) return;
         string id = m->id;
-        int idx = m - movies;
-        for (int i = idx; i < count - 1; i++) {
+        long long idx = m - movies;
+        for (long long i = idx; i < count - 1; i++) {
             movies[i] = movies[i + 1];
         }
         count--;

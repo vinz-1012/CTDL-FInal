@@ -1,12 +1,7 @@
 ﻿#ifndef THEATER_H
 #define THEATER_H
 #define ADMIN_PASSWORD "quanli123"
-#define RESET   "\x1b[0m"
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
-#define BOLD    "\x1b[1m"
+
 
 #include "Ticket.h"
 #include "queue.h"
@@ -17,6 +12,7 @@
 #include <iomanip> 
 #include <cfloat> 
 #include <climits> 
+#include"color.h"
 using namespace std;
 
 class Theater {
@@ -38,19 +34,21 @@ public:
             for (int j = 0; j < cols; j++) seats[i][j] = false;
     }
 
-    // Getter / Setter
     string getMovieId() const { return movieId; }
     string getShowtime() const { return showtime; }
     void setMovieId(const string& id) { movieId = id; }
     void setShowtime(const string& st) { showtime = st; }
     void displaySeats() {
         try {
-            cout << "\nSo do ghe:\n";
-            cout << setw(3) << "";
-            for (int j = 0; j < cols; j++) {
-                cout << setw(4) << (j + 1);
-            }
-            cout << "\n";
+                cout << "\n";
+                cout << BOLD << BLACK << WHITE_BG;
+                cout << "               M A N   H I N H               " << RESET << "\n\n";
+                cout << setw(4) << "";
+                for (int j = 0; j < cols; j++) {
+                    cout << setw(4) << j + 1;
+                }
+                cout << "\n";
+
             for (int i = 0; i < rows; i++) {
                 cout << setw(3) << char('A' + i);
                 for (int j = 0; j < cols; j++) {
@@ -143,7 +141,7 @@ public:
             return;
         }
 
-        cout << BOLD << BLUE;
+        cout << BOLD << BLUE<<WHITE_BG;
         cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
         cout << "| Mave    | Ten                  | SDT           | Ghe   | Gia(VND)  | Ma phim    | Suat chieu |\n";
         cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n" << RESET;
@@ -202,7 +200,7 @@ public:
                 }
             }
 
-            cout << BOLD << BLUE;
+            cout << BOLD << BLUE<<WHITE_BG;
             cout << "+---------+----------------------+---------------+------+-----------+\n";
             cout << "| Mave    | Ten                  | SDT           | Ghe  | Gia(VND)  |\n";
             cout << "+---------+----------------------+---------------+------+-----------+\n" << RESET;
@@ -240,7 +238,7 @@ public:
         for (int i = 0; i < TABLE_SIZE; i++) {
             Node* current = tickets.getTable()[i].getHead();
             while (current) {
-                if (idx < n) {                 
+                if (idx < n) {
                     arr[idx++] = current->ticket;
                 }
                 current = current->next;
@@ -261,7 +259,9 @@ public:
             delete[] ticketsArr;
         }
         catch (const exception& e) {
+            cout << "Loi xay ra: " << e.what() << endl;
         }
+
         return false;
     }
     bool isPhoneExists(const string& phone) {
@@ -276,7 +276,10 @@ public:
             }
             delete[] ticketsArr;
         }
-        catch (const exception& e) {}
+        catch (const exception& e) {
+            cout << "Loi xay ra: " << e.what() << endl;
+        }
+
         return false;
     }
     HashTable& getTickets() {
@@ -334,27 +337,27 @@ public:
 
                 int leftSeat;
                 if (j > 0) {
-                    leftSeat = prefix_s[i][j - 1]; 
+                    leftSeat = prefix_s[i][j - 1];
                 }
                 else {
-                    leftSeat = 0; 
+                    leftSeat = 0;
                 }
 
-                int rightSeat = prefix_s[i][j + numSeats - 1]; 
-                int occupied = rightSeat - leftSeat;          
-                if (occupied > 0) continue;   
+                int rightSeat = prefix_s[i][j + numSeats - 1];
+                int occupied = rightSeat - leftSeat;
+                if (occupied > 0) continue;
 
                 int leftDist;
                 if (j > 0) {
-                    leftDist = prefix_d[i][j - 1]; 
+                    leftDist = prefix_d[i][j - 1];
                 }
                 else {
                     leftDist = 0;
                 }
 
-                int rightDist = prefix_d[i][j + numSeats - 1]; 
-                int dSum = rightDist - leftDist;              
-                double dAvg = (double)dSum / numSeats;    
+                int rightDist = prefix_d[i][j + numSeats - 1];
+                int dSum = rightDist - leftDist;
+                double dAvg = (double)dSum / numSeats;
 
                 if (isBetter(dAvg, dSum, i, j, best, centerRow, centerCol, numSeats)) {
                     best = { i, j, dAvg, dSum };
@@ -379,5 +382,4 @@ public:
         return 100000;
     }
 };
-
 #endif

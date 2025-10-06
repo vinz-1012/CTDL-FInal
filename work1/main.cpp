@@ -11,7 +11,7 @@
 #include "moviemanager.h"
 
 using namespace std;
-
+MovieManager mm;
 int main() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -19,7 +19,10 @@ int main() {
     int choice;
 
     do {
-        cout << "\n===== HE THONG RAP CHIEU PHIM =====\n";
+        cout << "\n"
+            << BOLD << BLACK << WHITE_BG
+            << "===== HE THONG RAP CHIEU PHIM ====="
+            << RESET << "\n";
         cout << "1. Xem danh sach phim\n";
         cout << "2. Dang nhap khach hang\n";
         cout << "3. Dang nhap quan ly\n";

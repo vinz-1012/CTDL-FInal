@@ -9,7 +9,10 @@ using namespace std;
 void runAdminMenu(MovieManager& movieManager) {
     int choiceAdmin;
     do {
-        cout << "\n===== MENU QUAN LY =====\n";
+        cout << "\n"
+            << BOLD << BLACK << WHITE_BG
+            << "======= MENU QUAN LY ======="
+            << RESET << "\n";
         cout << "1. Hien thi danh sach tat ca ve cua mot suat\n";
         cout << "2. Hien thi so do ghe cua mot suat\n";
         cout << "3. Tim ve theo SDT\n";
@@ -97,7 +100,7 @@ void runAdminMenu(MovieManager& movieManager) {
         case 5: { 
             int subChoice;
             do {
-                cout << "\n===== QUAN LY PHIM =====\n";
+                cout << BLACK << WHITE_BG << "\n======= QUAN LY PHIM =======\n" << RESET;
                 cout << "1. Xem danh sach phim\n";
                 cout << "2. Them phim\n";
                 cout << "3. Sua phim\n";
