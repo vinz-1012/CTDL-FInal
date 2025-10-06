@@ -31,7 +31,7 @@ void runAdminMenu(Theater& t) {
             string searchPhone;
             cout << "Nhap so dien thoai can tim: ";
             getline(cin, searchPhone);
-            t.displayTicketsByPhone(searchPhone, "SDT"); 
+            t.displayTicketsByPhone(searchPhone,ADMIN_PASSWORD); 
             break;
         }
         case 4: {

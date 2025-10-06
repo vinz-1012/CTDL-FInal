@@ -137,7 +137,7 @@ public:
 
             int sum = 0;
             for (int i = 0; i < count; i++) {
-                if (results[i].password == password) { 
+                if (ADMIN_PASSWORD ||results[i].password == password) {
                     found = true;
                     string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
 
