@@ -31,14 +31,26 @@ int main() {
         case 1:
             t.displaySeats();
             break;
-
         case 2: {
             string phone, password;
             cout << "Nhap so dien thoai: ";
             getline(cin, phone);
             cout << "Nhap mat khau: ";
             getline(cin, password);
-            runCustomerMenu(t, phone, password);  
+            if (t.isPhoneExists(phone)) {
+             
+                if (t.checkCustomerLogin(phone, password)) {
+                    cout << "Dang nhap thanh cong!\n";
+                    runCustomerMenu(t, phone, password);
+                }
+                else {
+                    cout << "So dien thoai da ton tai nhung mat khau khong dung. Khong the tao tai khoan moi!\n";
+                }
+            }
+            else {
+                cout << "Tai khoan moi se duoc tao khi ban dat ve lan dau.\n";
+                runCustomerMenu(t, phone, password);
+            }
             break;
         }
 

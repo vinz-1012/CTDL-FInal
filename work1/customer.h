@@ -25,26 +25,34 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
             t.displaySeats();
             cout << "Nhap ten khach hang: ";
             getline(cin, name);
+
             int opt;
             cout << "Ban co muon he thong goi y GHE DEP? (1=Co, 0=Khong): ";
             cin >> opt;
             cin.ignore();
+
             if (opt == 1) {
                 int numSeats;
                 cout << "Nhap so luong ghe muon dat: ";
                 cin >> numSeats;
                 cin.ignore();
                 try {
-                     t.findBestSeats(numSeats);
-                   
+                    t.findBestSeats(numSeats);
                 }
                 catch (const exception& e) {
-                    cout<<RED << e.what() <<RESET<< endl;
+                    cout << RED << e.what() << RESET << endl;
                 }
             }
+
             cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
             getline(cin, seatLine);
-            reserveMultipleSeats(t, name, phone, password, seatLine);
+
+            try {
+                reserveMultipleSeats(t, name, phone, password, seatLine);
+            }
+            catch (const exception& e) {
+                cout << RED << "Loi khi dat ghe: " << e.what() << RESET << endl;
+            }
             break;
         }
         case 2: {
@@ -60,7 +68,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
             break;
         }
         case 3: {
-            t.displayTicketsByPhone(phone, "ban"); 
+            t.displayTicketsByPhone(phone, password);
             break;
         }
 

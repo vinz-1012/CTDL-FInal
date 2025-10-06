@@ -117,11 +117,12 @@ public:
         }
     }
 
-    void displayTicketsByPhone(string phone, string label) {
+    void displayTicketsByPhone(const string& phone, const string& password) {
         try {
             int count = 0;
             Ticket* results = tickets.findByPhone(phone, count);
-      
+
+            bool found = false;
             cout << BOLD << BLUE;
             cout << "+---------+----------------------+---------------+------+-----------+\n";
             cout << "| Mave    | Ten                  | SDT           | Ghe  | Gia(VND)  |\n";
@@ -129,25 +130,31 @@ public:
 
             int sum = 0;
             for (int i = 0; i < count; i++) {
-                string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
+                if (results[i].password == password) { // chỉ hiển thị vé có cùng mật khẩu
+                    found = true;
+                    string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
 
-                cout << "| " << setw(6) << left << results[i].code
-                    << " | " << setw(20) << left << results[i].name
-                    << " | " << setw(13) << left << results[i].phone
-                    << " | " << YELLOW << setw(4) << left << seatCode << RESET
-                    << " | " << RED << setw(9) << right << results[i].price << RESET << " |"
-                    << endl;
+                    cout << "| " << setw(6) << left << results[i].code
+                        << " | " << setw(20) << left << results[i].name
+                        << " | " << setw(13) << left << results[i].phone
+                        << " | " << YELLOW << setw(4) << left << seatCode << RESET
+                        << " | " << RED << setw(9) << right << results[i].price << RESET << " |"
+                        << endl;
 
-                sum += results[i].price;
+                    sum += results[i].price;
+                }
             }
 
             cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << GREEN << ">>> Tong tien ve cua " << label << ": " << sum << " VND" << RESET << endl;
+            if (found)
+                cout << GREEN << ">>> Tong tien ve: " << sum << " VND" << RESET << endl;
+            else
+                cout << RED << "Khong co ve nao cua tai khoan nay.\n" << RESET;
 
             delete[] results;
         }
         catch (const exception& e) {
-            cout<<RED << "Loi tim kiem: " << e.what() << RESET << endl;
+            cout << RED << "Loi tim kiem: " << e.what() << RESET << endl;
         }
     }
 
@@ -226,7 +233,37 @@ public:
         }
         return arr;
     }
-
+    bool checkCustomerLogin(const string& phone, const string& password) {
+        int n;
+        try {
+            Ticket* ticketsArr = getAllTickets(n);
+            for (int i = 0; i < n; i++) {
+                if (ticketsArr[i].phone == phone && ticketsArr[i].password == password) {
+                    delete[] ticketsArr;
+                    return true;
+                }
+            }
+            delete[] ticketsArr;
+        }
+        catch (const exception& e) {
+        }
+        return false;
+    }
+    bool isPhoneExists(const string& phone) {
+        int n;
+        try {
+            Ticket* ticketsArr = getAllTickets(n);
+            for (int i = 0; i < n; i++) {
+                if (ticketsArr[i].phone == phone) {
+                    delete[] ticketsArr;
+                    return true;
+                }
+            }
+            delete[] ticketsArr;
+        }
+        catch (const exception& e) {}
+        return false;
+    }
     HashTable& getTickets() {
         return tickets;
     }
@@ -236,7 +273,6 @@ public:
         double score;
         int sum;
     };
-
     bool isBetter(double dAvg, int dSum, int i, int j, const BestSeatChoice& best, int centerRow, int centerCol, int numSeats) {
         if (dAvg != best.score) return dAvg < best.score;
         if (dSum != best.sum) return dSum < best.sum;
