@@ -45,7 +45,7 @@ int main() {
                     runCustomerMenu(t, phone, password);
                 }
                 else {
-                    cout << "So dien thoai da ton tai nhung mat khau khong dung. Khong the tao tai khoan moi!\n";
+                    cout << "So dien thoai da ton tai hoac mat khau khong dung. Khong the tao tai khoan moi!\n";
                 }
             }
             else {
