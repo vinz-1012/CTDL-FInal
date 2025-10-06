@@ -26,6 +26,7 @@ int main() {
         cout << "Lua chon: ";
         cin >> choice;
         cin.ignore();
+        system("cls");
 
         switch (choice) {
         case 1:

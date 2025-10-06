@@ -19,6 +19,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
         cout << "Lua chon: ";
         cin >> choiceCus;
         cin.ignore();
+        system("cls");
 
         switch (choiceCus) {
         case 1: {

@@ -18,6 +18,7 @@ void runAdminMenu(Theater& t) {
         cout << "Lua chon: ";
         cin >> choiceAdmin;
         cin.ignore();
+        system("cls");
 
         switch (choiceAdmin) {
         case 1:
