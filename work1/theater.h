@@ -23,45 +23,52 @@ class Theater {
 private:
     int rows;
     int cols;
-    bool seats[5][5];
+    bool seats[10][10];
     HashTable tickets;
     Queue waitingList;
 public:
     Theater() {
-        rows = cols = 5;
+        rows = cols = 10;
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++) seats[i][j] = false;
     }
     void displaySeats() {
         try {
-            cout << "So do ghe:\n   ";
-            for (int j = 0; j < cols; j++)
-                cout << "[" << j + 1 << "] ";
-            cout << endl;
-
+            cout << "\nSo do ghe:\n";
+            cout << setw(3) << "";                
+            for (int j = 0; j < cols; j++) {
+                cout << setw(4) << (j + 1);
+            }
+            cout << "\n";
             for (int i = 0; i < rows; i++) {
-                cout << char('A' + i) << " ";
+                cout << setw(3) << char('A' + i);
                 for (int j = 0; j < cols; j++) {
+                    string symbol;
                     if (seats[i][j]) {
-                        cout << GREEN << " [X]" << RESET;
+                        symbol = string(GREEN) + "[X]" + string(RESET);
                     }
-                    else if ((i >= 1 && i <= 3) && (j >= 1 && j <= 3)) {
-                        cout << RED << " [ ]" << RESET;
+                    else if ((i >= 3 && i <= 6) && (j >= 3 && j <= 6)) {
+                        symbol = string(RED) + "[ ]" + string(RESET);
                     }
                     else {
-                        cout << YELLOW << " [ ]" << RESET;
+                        symbol = string(YELLOW) + "[ ]" + string(RESET);
                     }
+                    cout << ' ' << symbol; 
                 }
-                cout << endl;
+                cout << "\n";
             }
-            cout << YELLOW << "[ ]" << RESET << " : Ghe thuong (100,000 VND)\n";
-            cout << RED << "[ ]" << RESET << " : Ghe VIP (150,000 VND)\n";
-            cout << GREEN << "[X]" << RESET << " : Da duoc dat\n";
+
+            cout << "\n"
+                << YELLOW << "[ ]" << RESET << " : Ghe thuong (100,000 VND)\n"
+                << RED << "[ ]" << RESET << " : Ghe VIP (150,000 VND)\n"
+                << GREEN << "[X]" << RESET << " : Da duoc dat\n";
         }
         catch (const exception& e) {
-            cout << RED << "Loi khi hien thi ghe: " << e.what() << endl;
+            cout << RED << "Loi khi hien thi ghe: " << e.what() << RESET << endl;
         }
-    } 
+    }
+
+
 
     bool parseSeatCode(string seatCode, int& row, int& col) {
         if (seatCode.length() < 2) return false;
@@ -130,7 +137,7 @@ public:
 
             int sum = 0;
             for (int i = 0; i < count; i++) {
-                if (results[i].password == password) { // chỉ hiển thị vé có cùng mật khẩu
+                if (results[i].password == password) { 
                     found = true;
                     string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
 
@@ -298,9 +305,9 @@ public:
         int centerRow = rows / 2;
         int centerCol = cols / 2;
 
-        int d[5][5];
-        int prefix_d[5][5];
-        int prefix_s[5][5];
+        int d[10][10];
+        int prefix_d[10][10];
+        int prefix_s[10][10];
 
         for (int i = 0; i < rows; i++) {
             int runD = 0;
@@ -358,7 +365,7 @@ public:
         cout << endl;
     }
     int Price(int row, int col) {
-        if ((row >= 1 && row <= 3) && (col >= 1 && col <= 3)) {
+        if ((row >= 3 && row <= 6) && (col >= 3 && col <= 6)) {
             return 150000;
         }
         return 100000;
