@@ -58,11 +58,16 @@ void runAdminMenu(MovieManager& movieManager) {
                 Movie* m = movieManager.getMovie(i);
                 for (int j = 0; j < m->showtimeCount; j++) {
                     Theater* t = movieManager.getTheater(m, j);
-                    try {
+                    int count = 0;
+                    Ticket* results = t->getTickets().findByPhone(searchPhone, count);
+
+                    if (results && count > 0) {
+                        cout << BOLD << BLUE << "\n=== " << m->title
+                            << " | Suat " << m->showtimes[j] << " ===\n" << RESET;
                         t->displayTicketsByPhone(searchPhone, ADMIN_PASSWORD);
+                        delete[] results;
                         foundAny = true;
                     }
-                    catch (const std::exception&) {}
                 }
             }
             if (!foundAny)

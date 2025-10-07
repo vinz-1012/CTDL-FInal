@@ -55,6 +55,7 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
         }
         case 3: {
             t.displayTicketsByPhone(phone, password);
+
             break;
         }
         case 0:
