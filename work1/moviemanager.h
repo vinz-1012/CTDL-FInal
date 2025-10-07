@@ -41,9 +41,8 @@ public:
     
     void displayMovies() {
         cout << "\n"
-            << BOLD << BLACK << WHITE_BG
-            << "============== DANH SACH PHIM ================="
-            << RESET << "\n";
+            << BOLD << BLACK << WHITE_BG<< "============== DANH SACH PHIM ================="<< RESET << "\n";
+
         cout << left << setw(8) << "Ma"
             << setw(20) << "Ten phim"
             << "Suat chieu" << RESET << "\n";
@@ -211,7 +210,8 @@ public:
 
         if (found) {
             cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
-            cout << GREEN << ">>> Tong tien ve: " << totalSum << " VND\n" << RESET;
+            cout << BRIGHT_BLUE_BG << WHITE << ">>> Tong tien ve: " << totalSum << " VND\n"<< RESET;
+
         }
         else {
             cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;

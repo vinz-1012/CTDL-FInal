@@ -2,7 +2,6 @@
 #define THEATER_H
 #define ADMIN_PASSWORD "quanli123"
 
-
 #include "Ticket.h"
 #include "queue.h"
 #include "hashtable.h"
@@ -12,7 +11,7 @@
 #include <iomanip> 
 #include <cfloat> 
 #include <climits> 
-#include"color.h"
+#include "color.h"
 using namespace std;
 
 class Theater {
@@ -55,13 +54,13 @@ public:
                 for (int j = 0; j < cols; j++) {
                     string symbol;
                     if (seats[i][j]) {
-                        symbol = string(GREEN) + "[X]" + string(RESET);
+                        symbol = string(YELLOW) + "[X]" + string(RESET);
                     }
                     else if ((i >= 3 && i <= 6) && (j >= 3 && j <= 6)) {
                         symbol = string(RED) + "[ ]" + string(RESET);
                     }
                     else {
-                        symbol = string(YELLOW) + "[ ]" + string(RESET);
+                        symbol = string(PURPLE) + "[ ]" + string(RESET);
                     }
                     cout << ' ' << symbol;
                 }
@@ -69,12 +68,12 @@ public:
             }
 
             cout << "\n"
-                << YELLOW << "[ ]" << RESET << " : Ghe thuong (100,000 VND)\n"
+                << PURPLE << "[ ]" << RESET << " : Ghe thuong (100,000 VND)\n"
                 << RED << "[ ]" << RESET << " : Ghe VIP (150,000 VND)\n"
-                << GREEN << "[X]" << RESET << " : Da duoc dat\n";
+                << YELLOW <<"[X]" << RESET << " : Da duoc dat\n";
         }
         catch (const exception& e) {
-            cout << RED << "Loi khi hien thi ghe: " << e.what() << RESET << endl;
+            cout << RED << e.what() << RESET << endl;
         }
     }
 
@@ -113,7 +112,7 @@ public:
     void cancelSeat(string name, string phone, string code, string password) {
         Ticket* t = tickets.find(code);
         if (!t) throw runtime_error("Khong tim thay ve.");
-
+        bool isAdmin = (password == ADMIN_PASSWORD);
         if (password != ADMIN_PASSWORD) {
             if (t->phone != phone || t->password != password) {
                 throw runtime_error("Thong tin xac thuc khong dung. Khong the huy ve.");
@@ -123,9 +122,6 @@ public:
         seats[t->row][t->col] = false;
         int refund = t->price;
         tickets.remove(code);
-
-        cout << RED << ">>> Huy ve thanh cong. Hoan tien: " << refund << " VND\n" << RESET;
-
         if (!waitingList.isEmpty()) {
             Ticket next = waitingList.dequeue();
             string seatCode = string(1, 'A' + next.row) + to_string(next.col + 1);
@@ -183,12 +179,15 @@ public:
             }
 
             cout << "+---------+----------------------+---------------+------+-----------+\n";
-            cout << GREEN << ">>> DOANH THU: " << sum << " VND" << RESET << endl;
+            cout << BRIGHT_BLUE_BG << WHITE
+                << ">>> DOANH THU: " << sum << " VND"
+                << RESET << endl;
+
 
             delete[] arr;
         }
         catch (const exception& e) {
-            cout << "Loi hien thi danh sach: " << e.what() << RESET << endl;
+            cout << RED << e.what() << RESET << endl;
         }
     }
     Ticket* getAllTickets(int& n) {
@@ -331,7 +330,8 @@ public:
         if (best.row == -1) {
             throw runtime_error("Khong tim thay cum ghe lien ke phu hop.");
         }
-        cout << "GHE DEP: ";
+        cout << WHITE_BG << YELLOW<< "GHE DEP:"<< RESET<<" ";
+
         for (int k = 0; k < numSeats; k++) {
             string seatCode = string(1, 'A' + best.row) + to_string(best.startCol + k + 1);
             cout << seatCode << " ";

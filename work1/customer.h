@@ -12,8 +12,12 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
     Theater* currentTheater = nullptr; 
 
     do {
-        cout << "\n===== MENU KHACH HANG =====\n";
-        cout << "1. Dat ghe\n2. Huy ghe\n3. Xem ve da dat\n0. Thoat che do khach hang\n";
+        cout<<"\n"<< BOLD << WHITE_BG << BLACK << "======= MENU KHACH HANG =======" << RESET<<"\n";
+
+        cout << "1. Dat ghe\n";
+        cout << "2. Huy ghe\n";
+        cout << "3. Xem ve da dat\n";
+        cout << "0. Thoat che do khach hang\n";
         cout << "Lua chon: ";
         cin >> choiceCus;
         cin.ignore();
@@ -59,7 +63,7 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
                 reserveMultipleSeats(*currentTheater, name, phone, password, seatLine);
             }
             catch (const exception& e) {
-                cout << RED << "Loi khi dat ghe: " << e.what() << RESET << endl;
+                cout << RED << e.what() << RESET << endl;
             }
             break;
         }
@@ -70,23 +74,31 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
             cin.ignore();
 
             bool canceled = false;
+            string code, seatCode, movieId, showtime;
+            int refund = 0; 
+
             for (int i = 0; i < manager.countMovies(); i++) {
                 Movie* m = manager.getMovie(i);
                 for (int j = 0; j < m->showtimeCount; j++) {
                     Theater* t = manager.getTheater(m, j);
                     if (!t) continue;
 
-                    
                     Ticket* tk = t->getTickets().find(ticketCode);
                     if (tk && tk->phone == phone && tk->password == password) {
+                        code = tk->code;
+                        seatCode = string(1, 'A' + tk->row) + to_string(tk->col + 1);
+                        movieId = tk->movieId;
+                        showtime = tk->showtime;
+                        refund = tk->price;
+
                         try {
                             t->cancelSeat("", phone, ticketCode, password);
                             canceled = true;
-                            break; 
+                            break;
                         }
                         catch (const exception& e) {
                             cout << RED << e.what() << RESET << endl;
-                            canceled = true; 
+                            canceled = true;
                             break;
                         }
                     }
@@ -97,11 +109,17 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
             if (!canceled)
                 cout << RED << "Khong tim thay ve hoac thong tin khong khop.\n" << RESET;
             else
-                cout << GREEN << ">>> Da huy ve thanh cong!\n" << RESET;
+                cout << GREEN
+                << ">>> Da huy ve thanh cong!\n"
+                << ">>> Ma ve: " << code
+                << " | Ghe : " << seatCode
+                << " | Phim : " << movieId
+                << " | Suat chieu: " << showtime << "\n"
+                << ">>> So tien hoan: " << refund << " VND\n"
+                << RESET;
 
             break;
         }
-
 
         case 3: {
             manager.displayTicketsByPhone(phone, password);

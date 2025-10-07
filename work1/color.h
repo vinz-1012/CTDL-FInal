@@ -9,9 +9,12 @@
 #define GREEN       "\033[32m"
 #define PURPLE      "\033[35m"
 #define PURPLE_BG   "\033[45m"
-#define RED     "\x1b[31m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
+#define RED         "\x1b[31m"
+#define YELLOW      "\x1b[33m"
+#define BLUE        "\x1b[34m"
+#define RED_BG      "\033[101m"
+#define WHITE       "\033[97m"
+#define BRIGHT_BLUE_BG "\033[104m"
 
 
 #endif

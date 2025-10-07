@@ -39,9 +39,19 @@ void reserveMultipleSeats(Theater& t, const string& name, const string& phone, c
         string ticketCode = generateUniqueTicketCode(t.getTickets());
         
         t.reserveSeat(name, phone, seatCode, ticketCode, password, t.getMovieId(), t.getShowtime());
-        cout << ">>> Ghe " << seatCode << " dat thanh cong. Ma ve: " << ticketCode
-            << " | Ma phim: " << t.getMovieId()
-            << " | Suat chieu: " << t.getShowtime() << "\n";
+        cout << GREEN << ">>> Ghe " << seatCode << " dat thanh cong." << RESET << "\n";
+
+        cout << RED_BG << WHITE << "-------------------------------" << RESET << "\n";
+
+        cout << RED_BG << WHITE << " Ma ve     : " << ticketCode
+            << " " << string(17 - ticketCode.length(), ' ') << "" << RESET << "\n";
+        cout << RED_BG << WHITE << " Ma phim   : " << t.getMovieId()
+            << " " << string(17 - t.getMovieId().length(), ' ') << "" << RESET << "\n";
+        cout << RED_BG << WHITE << " Suat chieu: " << t.getShowtime()
+            << " " << string(17 - t.getShowtime().length(), ' ') << "" << RESET << "\n";
+        cout << RED_BG << WHITE << " Ghe       : " << seatCode
+            << " " << string(17 - seatCode.length(), ' ') << RESET << "\n";
+        cout << RED_BG << WHITE << "-------------------------------" << RESET << "\n";
     }
 }
 

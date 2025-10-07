@@ -9,10 +9,10 @@ using namespace std;
 void runAdminMenu(MovieManager& movieManager) {
     int choiceAdmin;
     do {
-        cout << "\n"
-            << BOLD << BLACK << WHITE_BG
-            << "======= MENU QUAN LY ======="
+        cout << "\n" << BOLD << BLACK << WHITE_BG
+            << "================ MENU QUAN LY ================"
             << RESET << "\n";
+
         cout << "1. Hien thi danh sach tat ca ve cua mot suat\n";
         cout << "2. Hien thi so do ghe cua mot suat\n";
         cout << "3. Tim ve theo SDT\n";
@@ -67,11 +67,20 @@ void runAdminMenu(MovieManager& movieManager) {
                     Theater* t = movieManager.getTheater(m, j);
                     Ticket* tk = t->getTickets().find(code);
                     if (tk) {
-                        
                         string seatCode = string(1, 'A' + tk->row) + to_string(tk->col + 1);
+                        int refund = tk->price;
+                        string name = tk->name;
+                        string movieId = tk->movieId;
+                        string showtime = tk->showtime;
                         t->cancelSeat(tk->name, tk->phone, tk->code, ADMIN_PASSWORD);
-                        cout << RED << ">>> Da huy ve: " << code
-                            << " (Ghe " << seatCode << ")\n" << RESET;
+                        cout << RED_BG << WHITE
+                            << ">>> Da huy ve: " << code
+                            << " (Ghe " << seatCode << ")\n"
+                            << ">>> Khach: " << name
+                            << " | Phim: " << movieId
+                            << " | Suat chieu: " << showtime
+                            << " | So tien hoan: " << refund << " VND\n"
+                            << RESET;
                         found = true;
                         break;
                     }
@@ -85,7 +94,7 @@ void runAdminMenu(MovieManager& movieManager) {
         case 5: { 
             int subChoice;
             do {
-                cout << BLACK << WHITE_BG << "\n======= QUAN LY PHIM =======\n" << RESET;
+                cout <<BOLD<< BLACK << WHITE_BG << "\n======= QUAN LY PHIM =======\n" << RESET;
                 cout << "1. Xem danh sach phim\n";
                 cout << "2. Them phim\n";
                 cout << "3. Sua phim\n";
