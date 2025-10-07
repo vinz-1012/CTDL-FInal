@@ -37,57 +37,48 @@ int main() {
             break;
 
         case 2: {
-            string phone, password;
-            cout << "Nhap so dien thoai: ";
-            getline(cin, phone);
-            cout << "Nhap mat khau: ";
-            getline(cin, password);
+    string phone, password;
+    cout << "Nhap so dien thoai: ";
+    getline(cin, phone);
+    cout << "Nhap mat khau: ";
+    getline(cin, password);
 
-            bool isExisting = false;
-            bool loggedIn = false;
-            Theater* foundTheater = nullptr;
+    bool isExisting = false;
+    bool loggedIn = false;
+    Theater* foundTheater = nullptr;
 
-            
-            for (int i = 0; i < movieManager->countMovies(); i++) {
-                Movie* m = movieManager->getMovie(i);
-                for (int j = 0; j < m->showtimeCount; j++) {
-                    Theater* t = movieManager->getTheater(m, j);
-                    if (t->isPhoneExists(phone)) {
-                        isExisting = true;
-                        foundTheater = t;
-                        if (t->checkCustomerLogin(phone, password)) {
-                            loggedIn = true;
-                        }
-                        break; 
-                    }
+    for (int i = 0; i < movieManager->countMovies(); i++) {
+        Movie* m = movieManager->getMovie(i);
+        for (int j = 0; j < m->showtimeCount; j++) {
+            Theater* t = movieManager->getTheater(m, j);
+            if (t->isPhoneExists(phone)) {
+                isExisting = true;
+                foundTheater = t;
+                if (t->checkCustomerLogin(phone, password)) {
+                    loggedIn = true;
                 }
-                if (isExisting) break; 
-            }
-
-            if (isExisting && !loggedIn) {
-                cout << RED << "So dien thoai da ton tai hoac mat khau khong dung. Khong the tao tai khoan moi!\n" << RESET;
                 break; 
             }
-
-            if (!isExisting) {
-                cout << GREEN << "Tai khoan moi se duoc tao khi ban dat ve lan dau.\n" << RESET;
-            }
-            else {
-                cout << GREEN << "Dang nhap thanh cong!\n" << RESET;
-            }
-
-            
-            Movie* selectedMovie = movieManager->selectMovie();
-            if (!selectedMovie) break;
-
-            int showtimeIndex = movieManager->selectShowtime(selectedMovie);
-            if (showtimeIndex == -1) break;
-
-            Theater* selectedTheater = movieManager->getTheater(selectedMovie, showtimeIndex);
-
-            runCustomerMenu(*selectedTheater, phone, password);
-            break;
         }
+        if (isExisting) break; 
+    }
+
+    if (isExisting && !loggedIn) {
+        cout << RED << "So dien thoai da ton tai hoac mat khau khong dung!\n" << RESET;
+        break; 
+    }
+
+    if (!isExisting) {
+        cout << GREEN << "Tai khoan moi se duoc tao khi ban dat ve lan dau.\n" << RESET;
+    }
+    else {
+        cout << GREEN << "Dang nhap thanh cong!\n" << RESET;
+    }
+
+    
+    runCustomerMenu(*movieManager, phone, password);
+    break;
+}
 
 
 

@@ -6,9 +6,10 @@
 #include <iostream>
 using namespace std;
 
-void runCustomerMenu(Theater& t, const string& phone, const string& password) {
+void runCustomerMenu(MovieManager& manager, const string& phone, const string& password) {
     int choiceCus;
     string name, seatLine, ticketCode;
+    Theater* currentTheater = nullptr; 
 
     do {
         cout << "\n===== MENU KHACH HANG =====\n";
@@ -20,7 +21,19 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
 
         switch (choiceCus) {
         case 1: {
-            t.displaySeats();
+            
+            Movie* selectedMovie = manager.selectMovie();
+            if (!selectedMovie) break;
+
+            int showtimeIndex = manager.selectShowtime(selectedMovie);
+            if (showtimeIndex == -1) break;
+
+            currentTheater = manager.getTheater(selectedMovie, showtimeIndex);
+            if (!currentTheater) {
+                cout << RED << "Khong tim thay rap cho suat chieu nay.\n" << RESET;
+                break;
+            }
+            currentTheater->displaySeats();
             cout << "Nhap ten khach hang: ";
             getline(cin, name);
 
@@ -31,35 +44,74 @@ void runCustomerMenu(Theater& t, const string& phone, const string& password) {
                 int numSeats;
                 cout << "Nhap so luong ghe muon dat: ";
                 cin >> numSeats; cin.ignore();
-                try { t.findBestSeats(numSeats); }
-                catch (const exception& e) { cout << RED << e.what() << RESET << endl; }
+                try {
+                    currentTheater->findBestSeats(numSeats);
+                }
+                catch (const exception& e) {
+                    cout << RED << e.what() << RESET << endl;
+                }
             }
 
             cout << "Nhap cac ma ghe (vd A1,A2,B3): ";
             getline(cin, seatLine);
 
             try {
-                reserveMultipleSeats(t, name, phone, password, seatLine);
+                reserveMultipleSeats(*currentTheater, name, phone, password, seatLine);
             }
             catch (const exception& e) {
                 cout << RED << "Loi khi dat ghe: " << e.what() << RESET << endl;
             }
             break;
         }
+
         case 2: {
             cout << "Nhap ma ve: ";
-            cin >> ticketCode; cin.ignore();
-            try { t.cancelSeat("", phone, ticketCode, password); }
-            catch (const exception& e) { cout << RED << "Loi khi huy ve: " << e.what() << RESET << endl; }
-            break;
-        }
-        case 3: {
-            t.displayTicketsByPhone(phone, password);
+            cin >> ticketCode;
+            cin.ignore();
+
+            bool canceled = false;
+            for (int i = 0; i < manager.countMovies(); i++) {
+                Movie* m = manager.getMovie(i);
+                for (int j = 0; j < m->showtimeCount; j++) {
+                    Theater* t = manager.getTheater(m, j);
+                    if (!t) continue;
+
+                    
+                    Ticket* tk = t->getTickets().find(ticketCode);
+                    if (tk && tk->phone == phone && tk->password == password) {
+                        try {
+                            t->cancelSeat("", phone, ticketCode, password);
+                            canceled = true;
+                            break; 
+                        }
+                        catch (const exception& e) {
+                            cout << RED << e.what() << RESET << endl;
+                            canceled = true; 
+                            break;
+                        }
+                    }
+                }
+                if (canceled) break;
+            }
+
+            if (!canceled)
+                cout << RED << "Khong tim thay ve hoac thong tin khong khop.\n" << RESET;
+            else
+                cout << GREEN << ">>> Da huy ve thanh cong!\n" << RESET;
 
             break;
         }
+
+
+        case 3: {
+            manager.displayTicketsByPhone(phone, password);
+            break;
+        }
+
         case 0:
-            cout << "Thoat che do khach hang.\n"; break;
+            cout << "Thoat che do khach hang.\n";
+            break;
+
         default:
             cout << RED << "Lua chon khong hop le!\n" << RESET;
         }

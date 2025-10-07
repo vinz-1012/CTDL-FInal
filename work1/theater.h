@@ -26,6 +26,7 @@ private:
     string showtime;
 
 public:
+    
     Theater(const string& mId = "", const string& st = "")
         : movieId(mId), showtime(st)
     {
@@ -131,44 +132,6 @@ public:
             reserveSeat(next.name, next.phone, seatCode, next.code, next.password, next.movieId, next.showtime);
         }
     }
-
-
-    void displayTicketsByPhone(const string& phone, const string& password) {
-        int count = 0;
-        Ticket* results = tickets.findByPhone(phone, count);
-        if (!results || count == 0) {
-            cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;
-            return;
-        }
-
-        cout << BOLD << BLUE<<WHITE_BG;
-        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
-        cout << "| Mave    | Ten                  | SDT           | Ghe   | Gia(VND)  | Ma phim    | Suat chieu |\n";
-        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n" << RESET;
-
-        int sum = 0;
-        for (int i = 0; i < count; i++) {
-            if (password == ADMIN_PASSWORD || results[i].password == password) {
-                string seatCode = string(1, 'A' + results[i].row) + to_string(results[i].col + 1);
-                cout << "| " << setw(6) << left << results[i].code
-                    << " | " << setw(20) << left << results[i].name
-                    << " | " << setw(13) << left << results[i].phone
-                    << " | " << YELLOW << setw(5) << left << seatCode << RESET
-                    << " | " << RED << setw(9) << right << results[i].price << RESET
-                    << " | " << setw(10) << left << results[i].movieId
-                    << " | " << setw(10) << left << results[i].showtime
-                    << " |" << endl;
-                sum += results[i].price;
-            }
-        }
-
-        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
-        cout << GREEN << ">>> Tong tien ve: " << sum << " VND" << RESET << endl;
-
-        delete[] results;
-    }
-
-
 
 
     void displaySortedBySeat() {

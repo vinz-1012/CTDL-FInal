@@ -175,6 +175,49 @@ public:
         count--;
         cout << GREEN << ">>> Da xoa phim " << id << "!\n" << RESET;
     }
+    void displayTicketsByPhone(const string& phone, const string& password) {
+        bool found = false;
+        int totalSum = 0;
+
+        cout << BOLD << BLUE << WHITE_BG;
+        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
+        cout << "| Mave    | Ten                  | SDT           | Ghe   | Gia(VND)  | Ma phim    | Suat chieu |\n";
+        cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n" << RESET;
+
+        for (int i = 0; i < countMovies(); i++) {
+            Movie* movie = getMovie(i);
+            for (int j = 0; j < movie->showtimeCount; j++) {
+                Theater* t = getTheater(movie, j);
+                int count = 0;
+                Ticket* results = t->getTickets().findByPhone(phone, count);
+
+                for (int k = 0; k < count; k++) {
+                    if (password == ADMIN_PASSWORD || results[k].password == password) {
+                        found = true;
+                        string seatCode = string(1, 'A' + results[k].row) + to_string(results[k].col + 1);
+                        cout << "| " << setw(6) << left << results[k].code
+                            << " | " << setw(20) << left << results[k].name
+                            << " | " << setw(13) << left << results[k].phone
+                            << " | " << YELLOW << setw(5) << left << seatCode << RESET
+                            << " | " << RED << setw(9) << right << results[k].price << RESET
+                            << " | " << setw(10) << left << results[k].movieId
+                            << " | " << setw(10) << left << results[k].showtime
+                            << " |" << endl;
+                        totalSum += results[k].price;
+                    }
+                }
+            }
+        }
+
+        if (found) {
+            cout << "+---------+----------------------+---------------+-------+-----------+------------+------------+\n";
+            cout << GREEN << ">>> Tong tien ve: " << totalSum << " VND\n" << RESET;
+        }
+        else {
+            cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;
+        }
+    }
+
 };
 
 #endif

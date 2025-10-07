@@ -47,31 +47,11 @@ void runAdminMenu(MovieManager& movieManager) {
             theater->displaySeats();
             break;
         }
-        case 3: { 
+        case 3: {
             string searchPhone;
             cout << "Nhap so dien thoai can tim: ";
             getline(cin, searchPhone);
-            bool foundAny = false;
-
-            
-            for (int i = 0; i < movieManager.countMovies(); i++) {
-                Movie* m = movieManager.getMovie(i);
-                for (int j = 0; j < m->showtimeCount; j++) {
-                    Theater* t = movieManager.getTheater(m, j);
-                    int count = 0;
-                    Ticket* results = t->getTickets().findByPhone(searchPhone, count);
-
-                    if (results && count > 0) {
-                        cout << BOLD << BLUE << "\n=== " << m->title
-                            << " | Suat " << m->showtimes[j] << " ===\n" << RESET;
-                        t->displayTicketsByPhone(searchPhone, ADMIN_PASSWORD);
-                        delete[] results;
-                        foundAny = true;
-                    }
-                }
-            }
-            if (!foundAny)
-                cout << RED << "Khong tim thay ve voi SDT nay.\n" << RESET;
+            movieManager.displayTicketsByPhone(searchPhone, ADMIN_PASSWORD);
             break;
         }
         case 4: { 
