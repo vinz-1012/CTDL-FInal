@@ -258,8 +258,8 @@ public:
             }
             delete[] ticketsArr;
         }
-        catch (const exception& e) {
-            cout << "Loi xay ra: " << e.what() << endl;
+        catch (const runtime_error&) {
+            
         }
 
         return false;
@@ -276,8 +276,8 @@ public:
             }
             delete[] ticketsArr;
         }
-        catch (const exception& e) {
-            cout << "Loi xay ra: " << e.what() << endl;
+        catch (const runtime_error&) {
+            
         }
 
         return false;

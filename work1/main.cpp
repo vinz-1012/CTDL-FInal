@@ -11,7 +11,6 @@
 #include "moviemanager.h"
 
 using namespace std;
-MovieManager mm;
 int main() {
     srand(static_cast<unsigned int>(time(nullptr)));
 

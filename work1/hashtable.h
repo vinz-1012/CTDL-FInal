@@ -46,17 +46,18 @@ public:
             }
         }
         if (count == 0) {
-            throw runtime_error("Khong tim thay ve voi SDT nay.");
+            return nullptr;
         }
 
         Ticket* results = new Ticket[count];
-        int idx = 0;
-        for (int i = 0; i < TABLE_SIZE; i++) {
+        long long idx = 0;
+        for (long long i = 0; i < TABLE_SIZE; i++) {
             Node* current = table[i].getHead();
             while (current) {
-                if (current->ticket.phone == phone) {
+                if (idx < count && current->ticket.phone == phone) {
                     results[idx++] = current->ticket;
                 }
+
                 current = current->next;
             }
         }
