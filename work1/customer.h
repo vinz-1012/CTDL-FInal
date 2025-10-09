@@ -30,7 +30,7 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
             system("cls");
 
             switch (choiceCus) {
-            case 1: { // Đặt ghế
+            case 1: { 
                 try {
                     Movie* selectedMovie = manager.selectMovie();
                     if (!selectedMovie) break;
@@ -93,7 +93,7 @@ void runCustomerMenu(MovieManager& manager, const string& phone, const string& p
                 break;
             }
 
-            case 2: { // Hủy ghế
+            case 2: { 
                 try {
                     cout << "Nhap ma ve: ";
                     cin >> ticketCode;

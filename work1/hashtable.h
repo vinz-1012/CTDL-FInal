@@ -50,8 +50,8 @@ public:
         }
 
         Ticket* results = new Ticket[count];
-        long long idx = 0;
-        for (long long i = 0; i < TABLE_SIZE; i++) {
+        int idx = 0;
+        for (int i = 0; i < TABLE_SIZE; i++) {
             Node* current = table[i].getHead();
             while (current) {
                 if (idx < count && current->ticket.phone == phone) {
