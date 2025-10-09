@@ -4,7 +4,7 @@
 #include "linkedlist.h"
 #include <stdexcept>
 
-#define TABLE_SIZE 100
+#define TABLE_SIZE 101
 
 class HashTable {
 private:
@@ -46,7 +46,6 @@ public:
             }
         }
         if (count == 0) {
-
             return nullptr;
         }
 
