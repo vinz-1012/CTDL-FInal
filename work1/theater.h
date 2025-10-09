@@ -120,7 +120,6 @@ public:
         }
 
         seats[t->row][t->col] = false;
-        int refund = t->price;
         tickets.remove(code);
         if (!waitingList.isEmpty()) {
             Ticket next = waitingList.dequeue();
