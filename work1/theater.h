@@ -249,11 +249,9 @@ public:
     struct BestSeatChoice {
         int row;
         int startCol;
-        double score;
         int sum;
     };
-    bool isBetter(double dAvg, int dSum, int i, int j, const BestSeatChoice& best, int centerRow, int centerCol, int numSeats) {
-        if (dAvg != best.score) return dAvg < best.score;
+    bool isBetter(int dSum, int i, int j, const BestSeatChoice& best, int centerRow, int centerCol, int numSeats) {
         if (dSum != best.sum) return dSum < best.sum;
 
         int dRowCur = abs(i - centerRow);
@@ -273,7 +271,7 @@ public:
             throw runtime_error("Rat tiec, so luong ghe ban can khong du.");
         }
 
-        BestSeatChoice best = { -1, -1, DBL_MAX, INT_MAX };
+        BestSeatChoice best = { -1, -1, INT_MAX };
         int centerRow = rows / 2;
         int centerCol = cols / 2;
 
@@ -318,10 +316,9 @@ public:
 
                 int rightDist = prefix_d[i][j + numSeats - 1];
                 int dSum = rightDist - leftDist;
-                double dAvg = (double)dSum / numSeats;
 
-                if (isBetter(dAvg, dSum, i, j, best, centerRow, centerCol, numSeats)) {
-                    best = { i, j, dAvg, dSum };
+                if (isBetter(dSum, i, j, best, centerRow, centerCol, numSeats)) {
+                    best = { i, j, dSum };
                 }
             }
         }
