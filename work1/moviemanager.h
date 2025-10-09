@@ -199,8 +199,8 @@ public:
             Movie* m = selectMovie();
             if (!m) return;
             string id = m->id;
-            long long idx = m - movies;
-            for (long long i = idx; i < count - 1; i++) {
+            int idx = m - movies;
+            for (int i = idx; i < count - 1; i++) {
                 movies[i] = movies[i + 1];
             }
             count--;
